@@ -1,6 +1,6 @@
-import { Inter } from "next/font/google";
-import "@/styles/globals.css";
+import { Inter, Audiowide } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
+const audiowide = Audiowide({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata = {
   title: "todo-app-next",
