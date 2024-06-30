@@ -7,14 +7,17 @@ export default function MyButton({
   icon = null,
   color,
   handler = null,
+  role = undefined,
 }: {
   label: string;
   icon?: IconDefinition | null;
   color: string;
   handler?: any;
+  role?: string | undefined;
 }) {
   return (
-    <motion.button
+    <motion.div
+      role={role}
       onClick={handler}
       animate={{ borderBottom: "5px solid transparent" }}
       whileHover={{ borderBottom: "5px solid green", y: -5 }}
@@ -29,6 +32,6 @@ export default function MyButton({
       ) : (
         <span>{label}</span>
       )}
-    </motion.button>
+    </motion.div>
   );
 }
