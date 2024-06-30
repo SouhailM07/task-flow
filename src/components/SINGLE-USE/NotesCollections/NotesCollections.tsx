@@ -1,5 +1,4 @@
 "use client";
-import "./notescollections.css";
 import {
   useState,
   useEffect,
@@ -9,7 +8,6 @@ import {
 } from "react";
 import axios from "axios";
 import {
-  faChevronDown,
   faCloud,
   faPlus,
   faTrash,
@@ -39,19 +37,24 @@ import { useToast } from "@/components/ui/use-toast";
 import selectedCollectionStore from "@/zustand/selectedCollection.store";
 import notesCollectionsStore from "@/zustand/notesCollections.store";
 import loadingStore from "@/zustand/loading.store";
+import collectionApiStore from "@/zustand/collectionApi.store";
 
 // ! contexts
 const NotesCollectionsContext: any = createContext("");
 
 export default function NotesCollections() {
+  // ! there is a weird error about this one , maybe it's an asynchronous error
   const { notesCollections } = notesCollectionsStore((state) => state);
-  const { collection } = selectedCollectionStore((state) => state);
+  let { collectionApi } = collectionApiStore((state) => state);
+
   return (
     <LOCAL_CONTEXT_BOX>
       <article>
         <Popover>
           <PopoverTrigger className="flex items-center gap-x-[1rem]">
-            <span className="uppercase font-medium">{collection?.name}</span>
+            <span className="uppercase font-medium">
+              {collectionApi?.name || "select one"}
+            </span>
           </PopoverTrigger>
           <PopoverContent className="translate-x-[-5rem] ">
             <ul role="list" className="max-h-[11rem] overflow-y-auto pr-1">
@@ -107,7 +110,6 @@ const CreateCollection = ({ triggerStyle }) => {
 };
 
 const NotesCollections__RenderItem = ({ e }) => {
-  const { setCollection } = selectedCollectionStore((state) => state);
   const { handleSelectCollection }: any = useContext(NotesCollectionsContext);
   return (
     <div
@@ -207,7 +209,10 @@ const MyDialog_Delete = ({ collection }) => {
 const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
   const { setLoading } = loadingStore((state) => state);
-  const { collection, setCollection } = selectedCollectionStore(
+  const { collectionId, setCollectionId } = selectedCollectionStore(
+    (state) => state
+  );
+  let { collectionApi, editCollectionApi } = collectionApiStore(
     (state) => state
   );
   const { toast } = useToast();
@@ -232,17 +237,7 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
     }
   };
   const handleSelectCollection = async (e) => {
-    try {
-      setLoading(false);
-      let res = await axios.get(
-        `${APP_API_URL}/api/notesCollections?collectionId=${e._id}`
-      );
-      setCollection(res.data);
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setLoading(false);
-    }
+    setCollectionId(e?._id);
   };
   const handleAddCollection = async (id, inputState) => {
     try {
@@ -313,12 +308,24 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     }
   };
+  // ;
+  const handleGetCollectionApi = async () => {
+    try {
+      let res = await axios.get(
+        `${APP_API_URL}/api/notesCollections?collectionId=${collectionId}`
+      );
+      editCollectionApi(res.data);
+    } catch (error) {
+      handleError(error);
+    }
+  };
   useEffect(() => {
     if (user) {
       getCollections();
-      console.log(notesCollections);
+      handleGetCollectionApi();
+      console.log("check render from the top");
     }
-  }, [user]);
+  }, [user, collectionId]);
   return (
     <NotesCollectionsContext.Provider
       value={{
@@ -327,6 +334,7 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
         handleDeleteNoteCollection,
         handleEditNotesCollection,
         handleSelectCollection,
+        handleGetCollectionApi,
       }}
     >
       {children}
