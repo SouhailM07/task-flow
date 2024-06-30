@@ -5,6 +5,9 @@
 html {
   @apply text-[20px];
 }
+.absolutePanel {
+  @apply z-[100] bg-[#00000073] w-full min-h-screen fixed place-items-center grid;
+}
 .b {
   @apply border-2 border-green-400;
 }

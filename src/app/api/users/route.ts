@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectMongoose from "@/lib/connectDB";
 import User from "@/models/user.model";
-import handleResponse from "@/lib/handleRespnose";
+import handleResponse from "@/lib/handleResponse";
+import NoteCollection from "@/models/noteCollection";
 
 connectMongoose();
 
@@ -37,6 +38,9 @@ export async function DELETE(req: NextRequest) {
   try {
     const id = req.nextUrl.searchParams.get("id");
     const deleteUser = await User.findByIdAndDelete(id);
+    const DELETE_RELATED_NOTES_COLLECTIONS = await NoteCollection.deleteMany({
+      user: deleteUser._id,
+    });
     if (!deleteUser) {
       return handleResponse("User not found", 404);
     }

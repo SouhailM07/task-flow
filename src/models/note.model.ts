@@ -3,7 +3,11 @@ import { Schema, model } from "mongoose";
 const noteSchema = new Schema({
   note: { type: String, required: true },
   done: { type: Boolean, required: false, default: false },
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  notesCollection: {
+    type: Schema.Types.ObjectId,
+    ref: "NoteCollection",
+    required: true,
+  },
 });
 
 let Note;

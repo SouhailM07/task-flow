@@ -6,13 +6,16 @@ export default function MyButton({
   label,
   icon = null,
   color,
+  handler = null,
 }: {
   label: string;
   icon?: IconDefinition | null;
   color: string;
+  handler?: any;
 }) {
   return (
     <motion.button
+      onClick={handler}
       animate={{ borderBottom: "5px solid transparent" }}
       whileHover={{ borderBottom: "5px solid green", y: -5 }}
       whileTap={{ y: 5, borderBottom: "5px solid transparent" }}

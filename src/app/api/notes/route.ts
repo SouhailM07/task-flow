@@ -1,17 +1,18 @@
 import { NextRequest } from "next/server";
 import connectMongoose from "@/lib/connectDB";
 import Note from "@/models/note.model";
-import handleResponse from "@/lib/handleRespnose";
+import handleResponse from "@/lib/handleResponse";
 
 connectMongoose();
 
 export async function GET(req: NextRequest) {
   try {
-    const userId = req.nextUrl.searchParams.get("userId");
-    const notes = await Note.find({ user: userId }).populate("user");
-    if (!notes) {
-      return handleResponse("notes was not found", 404);
-    }
+    // const collectionId = req.nextUrl.searchParams.get("collectionId");
+    // { noteCollection: collectionId }
+    const notes = await Note.find({}).populate("notesCollection");
+    // if (!notes) {
+    //   return handleResponse("notes was not found", 404);
+    // }
     return handleResponse(notes, 200);
   } catch (error) {
     return handleResponse(error, 500);
@@ -45,7 +46,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const id = await req.nextUrl.searchParams.get("id");
+    const id = req.nextUrl.searchParams.get("id");
     const deleteNote = await Note.findByIdAndDelete(id);
     if (!deleteNote) {
       return handleResponse("note was not found", 404);

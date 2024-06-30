@@ -1,6 +1,8 @@
 import { Schema, model } from "mongoose";
 
-const userSchema = new Schema({ clerkId: { type: String, required: true } });
+const userSchema = new Schema({
+  clerkId: { type: String, required: true, unique: true },
+});
 
 let User;
 try {
