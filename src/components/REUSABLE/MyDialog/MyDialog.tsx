@@ -1,14 +1,13 @@
 import { ReactElement, ReactNode } from "react";
-import "./mydialog.css";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 export default function MyDialog({
   children,
   trigger,
-  triggerStyle = null,
+  triggerStyle = undefined,
 }: {
   children: ReactNode;
   trigger: ReactElement;
-  triggerStyle?: string | null;
+  triggerStyle?: string | undefined;
 }) {
   return (
     <Dialog>
