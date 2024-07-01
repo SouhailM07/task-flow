@@ -62,11 +62,11 @@ export default function NotesCollections() {
             }}
             className="flex items-center gap-x-[1rem]"
           >
-            <span className="uppercase font-medium">
+            <span className="uppercase font-medium max-sm:text-[0.8rem]">
               {collectionApi?.name || "select one"}
             </span>
           </PopoverTrigger>
-          <PopoverContent className="translate-x-[-5rem] ">
+          <PopoverContent className="sm:translate-x-[-5rem] ">
             <ul role="list" className="max-h-[11rem] overflow-y-auto pr-1">
               {notesCollections.map((e: any, i) => (
                 <NotesCollections__RenderItem key={i} e={e} />
@@ -345,7 +345,7 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
     if (user) {
       handleGetCollectionApi();
       getCollections();
-      console.log("check render from the top");
+      // console.log("check render from the top");
     }
   }, [user, collectionId]);
   return (

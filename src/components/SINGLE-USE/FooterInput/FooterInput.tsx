@@ -62,19 +62,20 @@ export default function FooterInput() {
     }
   };
   return (
-    <section className="border-t border-gray-400 fixed bottom-0 w-full pb-[1rem] pt-[0.5rem] flexBetween gap-x-[2rem] px-[2rem]">
-      <Input
-        value={noteValue}
-        onChange={(e) => setNoteValue(e.target.value)}
-        placeholder="Add a new todo"
-        className=""
-      />
-      <MyButton
-        role="button"
-        handler={handleAddNote}
-        label="Add"
-        color="bg-primaryBlack text-white"
-      />
+    <section className=" fixed bottom-0 w-full ">
+      <article className="pt-[0.5rem] bg-white max-w-MAX mx-auto pb-[1rem]  px-[1rem] md:px-[2rem] flexBetween gap-x-[2rem] border-t border-gray-400">
+        <Input
+          value={noteValue}
+          onChange={(e) => setNoteValue(e.target.value)}
+          placeholder="Add a new todo"
+        />
+        <MyButton
+          role="button"
+          handler={handleAddNote}
+          label="Add"
+          color="bg-primaryBlack text-white"
+        />
+      </article>
     </section>
   );
 }

@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      height: { MAX: "calc(100vh - 9rem)" },
+
+      maxWidth: { MAX: "95rem" },
       colors: {
         // custom
         primaryBlack: "#19191c",

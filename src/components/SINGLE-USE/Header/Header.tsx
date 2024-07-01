@@ -11,9 +11,11 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0">
-      <nav className="bg-primaryBlack text-white flexBetween py-[0.7rem] pl-[1rem] pr-[2rem]">
-        <h1 className="text-[1.7rem] font-bold">Task Flow</h1>
+    <header className="sticky top-0 max-w-MAX mx-auto">
+      <nav className="bg-primaryBlack text-white flexBetween py-[0.7rem] pl-[1rem] pr-[1rem] sm:pr-[2rem]">
+        <h1 className="text-[1.7rem] font-bold max-md:text-[1.2rem]">
+          Task Flow
+        </h1>
         <section className="flex items-center gap-x-[1rem]">
           <NotesCollections />
           {isSignedIn ? (

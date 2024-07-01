@@ -22,11 +22,7 @@ export default function MyUserButton() {
     signOut();
     router.reload();
   };
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-    }
-  }, [user]);
+  useEffect(() => {}, [user]);
   return (
     <Popover>
       <PopoverTrigger>

@@ -46,16 +46,16 @@ export default function Note({
       role="listitem"
       initial="hidden"
       animate={controls}
-      className="flexBetween space-x-2 select-none min-w-[30rem] h-[3rem] px-[1rem]"
+      className="flexBetween space-x-2 select-none w-full md:min-w-[30rem] min-h-[3rem] md:h-[3rem] px-[1rem]"
     >
-      <div className="flex items-center gap-x-[1rem] h-full w-full">
+      <div className="flex items-center gap-x-[1rem] h-full w-full cursor-pointer ">
         <Checkbox id={`terms${index}`} checked={done} />
         <label
           htmlFor={`terms${index}`}
           onClick={() => handleUpdateNote(_id, done)}
           className={`${
             done && "line-through"
-          } h-full w-full flex items-center text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70`}
+          } h-full w-full leading-[1.5rem] flex items-center text-[0.8rem] sm:text-sm font-medium  peer-disabled:cursor-not-allowed peer-disabled:opacity-70`}
         >
           {note}
         </label>
