@@ -1,4 +1,3 @@
-import "./mylogin.css";
 import { motion } from "framer-motion";
 import { useSignIn } from "@clerk/nextjs";
 export default function MyLogin() {
