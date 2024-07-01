@@ -29,7 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MyButton from "@/components/REUSABLE/MyButton/MyButton";
 import { APP_API_URL } from "@/lib/APP_API_URL";
 import handleError from "@/lib/handleError";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { PopoverClose } from "@radix-ui/react-popover";
 import MyDialog from "@/components/REUSABLE/MyDialog/MyDialog";
 import { useToast } from "@/components/ui/use-toast";
@@ -38,6 +38,7 @@ import selectedCollectionStore from "@/zustand/selectedCollection.store";
 import notesCollectionsStore from "@/zustand/notesCollections.store";
 import loadingStore from "@/zustand/loading.store";
 import collectionApiStore from "@/zustand/collectionApi.store";
+import { useRouter } from "next/router";
 
 // ! contexts
 const NotesCollectionsContext: any = createContext("");
@@ -46,12 +47,21 @@ export default function NotesCollections() {
   // ! there is a weird error about this one , maybe it's an asynchronous error
   const { notesCollections } = notesCollectionsStore((state) => state);
   let { collectionApi } = collectionApiStore((state) => state);
-
+  const router = useRouter();
+  const { isSignedIn, isLoaded } = useAuth();
   return (
     <LOCAL_CONTEXT_BOX>
       <article>
         <Popover>
-          <PopoverTrigger className="flex items-center gap-x-[1rem]">
+          <PopoverTrigger
+            onClick={() => {
+              if (!isSignedIn && isLoaded) {
+                router.push("/login");
+                return null;
+              }
+            }}
+            className="flex items-center gap-x-[1rem]"
+          >
             <span className="uppercase font-medium">
               {collectionApi?.name || "select one"}
             </span>
@@ -113,12 +123,16 @@ const NotesCollections__RenderItem = ({ e }) => {
   const { handleSelectCollection }: any = useContext(NotesCollectionsContext);
   return (
     <div
-      onClick={() => handleSelectCollection(e)}
       role="listitem"
       className="mb-[1rem] h-[2.7rem] items-center w-full bg-neutral-800 text-white rounded-lg grid grid-cols-[2fr_1fr]"
     >
       <PopoverClose className="w-full h-full ">
-        <span>{e?.name}</span>
+        <span
+          className="w-full h-full grid place-items-center pl-2"
+          onClick={() => handleSelectCollection(e)}
+        >
+          {e?.name}
+        </span>
       </PopoverClose>
       <div className="space-x-[1rem] mx-auto">
         <MyDialog_Edit collection={e} />
@@ -208,6 +222,7 @@ const MyDialog_Delete = ({ collection }) => {
 
 const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
+  const router = useRouter();
   const { setLoading } = loadingStore((state) => state);
   const { collectionId, setCollectionId } = selectedCollectionStore(
     (state) => state
@@ -279,12 +294,16 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
   };
   const handleDeleteNoteCollection = async (collection) => {
     try {
+      if (collection?._id == collectionId) {
+        setCollectionId("");
+      }
       setLoading(true);
       const res = await axios.delete(
         `${APP_API_URL}/api/notesCollections?collectionId=${collection?._id}`
       );
       toast({ description: "Collection was deleted Successfully" });
       await getCollections();
+      await handleGetCollectionApi();
     } catch (error) {
       handleError(error);
     } finally {
@@ -302,6 +321,7 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
       );
       toast({ description: "Collection was updated Successfully" });
       await getCollections();
+      await handleGetCollectionApi();
     } catch (error) {
       handleError(error);
     } finally {
@@ -317,12 +337,14 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
       editCollectionApi(res.data);
     } catch (error) {
       handleError(error);
+      // editCollectionApi(null);
     }
   };
+
   useEffect(() => {
     if (user) {
-      getCollections();
       handleGetCollectionApi();
+      getCollections();
       console.log("check render from the top");
     }
   }, [user, collectionId]);

@@ -7,12 +7,15 @@ connectMongoose();
 
 export async function GET(req: NextRequest) {
   try {
-    // const collectionId = req.nextUrl.searchParams.get("collectionId");
+    const collectionId = req.nextUrl.searchParams.get("collectionId");
     // { noteCollection: collectionId }
-    const notes = await Note.find({}).populate("notesCollection");
-    // if (!notes) {
-    //   return handleResponse("notes was not found", 404);
-    // }
+    const notes = await Note.find({
+      notesCollection: collectionId,
+    }).populate("notesCollection");
+    if (!notes) {
+      return handleResponse("notes was not found", 404);
+    }
+
     return handleResponse(notes, 200);
   } catch (error) {
     return handleResponse(error, 500);
