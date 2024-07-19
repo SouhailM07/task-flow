@@ -6,8 +6,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useAnimationControls } from "framer-motion";
-import { NotesContext } from "@/pages";
 import notesStore from "@/zustand/notes.store";
+import { useNotesContext } from "@/context/NotesContext";
 export default function Note({
   index,
   note,
@@ -21,7 +21,7 @@ export default function Note({
 }) {
   // state toggle / state api / handlers
   const controls = useAnimationControls();
-  const { handleDeleteNote, handleUpdateNote }: any = useContext(NotesContext);
+  const { handleDeleteNote, handleUpdateNote }: any = useNotesContext();
   const animationVariants = {
     hidden: { x: "-200%", transition: { delay: 0 } },
     visible: { x: 0, transition: { delay: 0.2 * index } },
