@@ -10,7 +10,11 @@ import {
 } from "@/components/ui/popover";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPowerOff,
+  faUser,
+  faUserCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function MyUserButton() {
   const { user } = useUser();
@@ -20,7 +24,7 @@ export default function MyUserButton() {
   const handleGoProfile = () => router.push("/profile");
   const handleSignOut = () => {
     signOut();
-    router.reload();
+    setTimeout(() => router.reload(), 200);
   };
   useEffect(() => {}, [user]);
   return (
@@ -44,11 +48,22 @@ export default function MyUserButton() {
         )}
       </PopoverTrigger>
       <PopoverContent className="flex-col flex items-start font-medium">
-        <button onClick={handleGoProfile} className="b p-2 w-full text-start">
-          Profile
+        <button
+          onClick={handleGoProfile}
+          className="p-2 w-full text-start flexBetween hover:bg-neutral-400 rounded-md"
+        >
+          <span>Profile</span>
+          <FontAwesomeIcon icon={faUser} className="p-2 rounded-full" />
         </button>
-        <button onClick={handleSignOut} className="">
-          Sign out
+        <button
+          onClick={handleSignOut}
+          className="p-2 w-full text-start flexBetween hover:bg-neutral-400 rounded-md"
+        >
+          <span>Sign out</span>
+          <FontAwesomeIcon
+            icon={faPowerOff}
+            className="bg-red-500 text-white p-2 rounded-full"
+          />
         </button>
       </PopoverContent>
     </Popover>

@@ -32,12 +32,12 @@ export default function IndexRoute() {
     </div>;
   } else if (notes.length) {
     return (
-      <main className="grid place-items-center overflow-x-hidden  py-[1rem] h-MAX">
+      <main className="grid px-[1rem] md:px-[2rem] place-items-center overflow-x-hidden  py-[1rem] h-MAX">
         <motion.ul
           initial={{ border: "2px solid transparent" }}
           animate={{ border: "2px solid gray" }}
           transition={{ delay: 0.2 * notes.length + 0.5 }}
-          className="rounded-md max-sm:w-[92%] max-md:w-[80%] max-md:space-y-[1rem]"
+          className="rounded-md max-md:space-y-[1rem]"
         >
           {notes.map((e, i) => (
             <Note key={i} index={i} {...e} />

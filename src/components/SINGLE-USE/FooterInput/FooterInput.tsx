@@ -35,6 +35,15 @@ export default function FooterInput() {
   };
   const handleAddNote = async () => {
     try {
+      let isNoteExist = notes.filter((e) => e.note == noteValue).length;
+      if (isNoteExist) {
+        toast({
+          variant: "destructive",
+          description: "Note Already Exist",
+          duration: 3000,
+        });
+        return;
+      }
       if (noteValue.length > 0) {
         if (collectionId.length > 0) {
           setLoading(true);
@@ -51,6 +60,7 @@ export default function FooterInput() {
           toast({
             variant: "destructive",
             description: "Select or Create a Notes Collections",
+            duration: 3000,
           });
         }
       }
@@ -62,20 +72,19 @@ export default function FooterInput() {
     }
   };
   return (
-    <section className=" fixed bottom-0 w-full ">
-      <article className="pt-[0.5rem] bg-white max-w-MAX mx-auto pb-[1rem]  px-[1rem] md:px-[2rem] flexBetween gap-x-[2rem] border-t border-gray-400">
-        <Input
-          value={noteValue}
-          onChange={(e) => setNoteValue(e.target.value)}
-          placeholder="Add a new todo"
-        />
-        <MyButton
-          role="button"
-          handler={handleAddNote}
-          label="Add"
-          color="bg-primaryBlack text-white"
-        />
-      </article>
+    <section className=" fixed bottom-0 w-full pt-[0.5rem] bg-white pb-[1rem]  px-[1rem] md:px-[2rem] flexBetween gap-x-[2rem] border-t border-gray-400">
+      <Input
+        value={noteValue}
+        onChange={(e) => setNoteValue(e.target.value)}
+        placeholder="Add a new todo"
+      />
+      <MyButton
+        role="button"
+        handler={handleAddNote}
+        label="Add"
+        color="bg-primaryBlack text-white "
+        borderBottomColor="rgb(10 10 10)"
+      />
     </section>
   );
 }

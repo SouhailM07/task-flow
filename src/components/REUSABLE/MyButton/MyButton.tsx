@@ -8,19 +8,21 @@ export default function MyButton({
   color,
   handler = null,
   role = undefined,
+  borderBottomColor = "black",
 }: {
   label: string;
   icon?: IconDefinition | null;
   color: string;
   handler?: any;
   role?: string | undefined;
+  borderBottomColor?: string;
 }) {
   return (
     <motion.div
       role={role}
       onClick={handler}
       animate={{ borderBottom: "5px solid transparent" }}
-      whileHover={{ borderBottom: "5px solid green", y: -5 }}
+      whileHover={{ borderBottom: `5px solid ${borderBottomColor}`, y: -5 }}
       whileTap={{ y: 5, borderBottom: "5px solid transparent" }}
       className={`${color} rounded-lg p-3 space-x-[1rem] `}
     >

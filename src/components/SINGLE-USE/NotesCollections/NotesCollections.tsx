@@ -1,4 +1,3 @@
-"use client";
 import {
   useState,
   useEffect,
@@ -8,6 +7,7 @@ import {
 } from "react";
 import axios from "axios";
 import {
+  faBars,
   faCloud,
   faPlus,
   faTrash,
@@ -62,8 +62,11 @@ export default function NotesCollections() {
             }}
             className="flex items-center gap-x-[1rem]"
           >
-            <span className="uppercase font-medium max-sm:text-[0.8rem]">
+            <span className="uppercase font-medium max-sm:hidden">
               {collectionApi?.name || "select one"}
+            </span>
+            <span className="sm:hidden">
+              <FontAwesomeIcon icon={faBars} />
             </span>
           </PopoverTrigger>
           <PopoverContent className="sm:translate-x-[-5rem] ">
@@ -111,7 +114,8 @@ const CreateCollection = ({ triggerStyle }) => {
             handler={() => handleCreateAccount(inputState)}
             icon={faCloud}
             label="Save"
-            color="bg-green-500 text-white"
+            color="bg-green-500 text-white "
+            borderBottomColor="rgb(22 163 74)"
           />
         </DialogClose>
       </DialogFooter>
@@ -126,9 +130,9 @@ const NotesCollections__RenderItem = ({ e }) => {
       role="listitem"
       className="mb-[1rem] h-[2.7rem] items-center w-full bg-neutral-800 text-white rounded-lg grid grid-cols-[2fr_1fr]"
     >
-      <PopoverClose className="w-full h-full ">
+      <PopoverClose className="w-full max-h-full overflow-hidden overflow-ellipsis whitespace-nowrap  ">
         <span
-          className="w-full h-full grid place-items-center pl-2"
+          className="w-full h-full grid text-center pl-2"
           onClick={() => handleSelectCollection(e)}
         >
           {e?.name}
@@ -174,7 +178,8 @@ const MyDialog_Edit = ({ collection }) => {
             handler={() => handleEditNotesCollection(collection, editValue)}
             icon={faWrench}
             label="Edit"
-            color="bg-blue-500 text-white"
+            color="bg-blue-500 text-white "
+            borderBottomColor="rgb(37 99 235)"
           />
         </DialogClose>
       </DialogFooter>
@@ -213,6 +218,7 @@ const MyDialog_Delete = ({ collection }) => {
             icon={faTrash}
             label="Delete"
             color="bg-red-500 text-white"
+            borderBottomColor="rgb(220 38 38)"
           />
         </DialogClose>
       </DialogFooter>
@@ -262,16 +268,29 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
           user: id,
         })
         .then(() =>
-          toast({ description: "New Collection was added Successfully" })
+          toast({
+            description: "New Collection was added Successfully",
+            duration: 3000,
+          })
         )
         .then(getCollections);
     } catch (error) {
       handleError(error);
     }
   };
-
   const handleCreateAccount = async (inputState) => {
+    let isCollectionExist = notesCollections.filter(
+      (e) => e.name == inputState
+    ).length;
     try {
+      if (isCollectionExist) {
+        toast({
+          variant: "destructive",
+          description: "Collection Already exist !",
+          duration: 3000,
+        });
+        return;
+      }
       const res = await axios.get(
         `${APP_API_URL}/api/users?clerkId=${user?.id}`
       );
@@ -301,7 +320,10 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
       const res = await axios.delete(
         `${APP_API_URL}/api/notesCollections?collectionId=${collection?._id}`
       );
-      toast({ description: "Collection was deleted Successfully" });
+      toast({
+        description: "Collection was deleted Successfully",
+        duration: 3000,
+      });
       await getCollections();
       await handleGetCollectionApi();
     } catch (error) {
@@ -319,7 +341,10 @@ const LOCAL_CONTEXT_BOX = ({ children }: { children: ReactNode }) => {
           name: editValue,
         }
       );
-      toast({ description: "Collection was updated Successfully" });
+      toast({
+        description: "Collection was updated Successfully",
+        duration: 3000,
+      });
       await getCollections();
       await handleGetCollectionApi();
     } catch (error) {
