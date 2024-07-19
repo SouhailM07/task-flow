@@ -9,6 +9,7 @@ import Loading from "@/components/REUSABLE/Loading/Loading";
 import { Toaster } from "@/components/ui/toaster";
 import Head from "next/head";
 import NotesContextProvider from "@/context/NotesContext";
+import CollectionContextProvider from "@/context/CollectionsContext";
 export default function AppLayout({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -20,13 +21,15 @@ export default function AppLayout({ Component, pageProps }: AppProps) {
       >
         <Loading />
         <NotesContextProvider>
-          <DontRenderWhen route={["/login", "/profile/[[...index]]"]}>
-            <Header />
-          </DontRenderWhen>
-          <Component {...pageProps} />
-          <DontRenderWhen route={["/login", "/profile/[[...index]]"]}>
-            <FooterInput />
-          </DontRenderWhen>
+          <CollectionContextProvider>
+            <DontRenderWhen route={["/login", "/profile/[[...index]]"]}>
+              <Header />
+            </DontRenderWhen>
+            <Component {...pageProps} />
+            <DontRenderWhen route={["/login", "/profile/[[...index]]"]}>
+              <FooterInput />
+            </DontRenderWhen>
+          </CollectionContextProvider>
         </NotesContextProvider>
         <Toaster />
       </ClerkProvider>
