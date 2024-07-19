@@ -13,7 +13,7 @@ export default function AppLayout({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>shadow warrior</title>
+        <title>Task Flow</title>
       </Head>
       <ClerkProvider
         publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
