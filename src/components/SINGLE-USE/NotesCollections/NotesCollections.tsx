@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState } from "react";
 import {
   faBars,
   faCloud,
@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MyButton from "@/components/REUSABLE/MyButton/MyButton";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { PopoverClose } from "@radix-ui/react-popover";
 import MyDialog from "@/components/REUSABLE/MyDialog/MyDialog";
 import { useToast } from "@/components/ui/use-toast";
@@ -32,24 +32,14 @@ import { useCollectionContext } from "@/context/CollectionsContext";
 import selectedCollectionStore from "@/zustand/selectedCollection.store";
 
 // ! contexts
-const NotesCollectionsContext: any = createContext("");
 
 export default function NotesCollections() {
   // ! there is a weird error about this one , maybe it's an asynchronous error
   const { notesCollections } = notesCollectionsStore((state) => state);
-  const { collectionId } = selectedCollectionStore((state) => state);
   let { collectionApi } = collectionApiStore((state) => state);
-  const { user } = useUser();
   const router = useRouter();
   const { isSignedIn, isLoaded } = useAuth();
-  const { handleGetCollectionApi, getCollections } = useCollectionContext();
-  useEffect(() => {
-    if (user) {
-      handleGetCollectionApi();
-      getCollections();
-      // console.log("check render from the top");
-    }
-  }, [user, collectionId]);
+
   return (
     <article>
       <Popover>
@@ -84,7 +74,7 @@ export default function NotesCollections() {
 
 const CreateCollection = ({ triggerStyle }) => {
   const [inputState, setInputState] = useState("");
-  const { handleCreateAccount }: any = useContext(NotesCollectionsContext);
+  const { handleCreateAccount }: any = useCollectionContext();
 
   return (
     <MyDialog
@@ -123,7 +113,7 @@ const CreateCollection = ({ triggerStyle }) => {
 };
 
 const NotesCollections__RenderItem = ({ e }) => {
-  const { handleSelectCollection }: any = useContext(NotesCollectionsContext);
+  const { handleSelectCollection }: any = useCollectionContext();
   return (
     <div
       role="listitem"
@@ -147,9 +137,7 @@ const NotesCollections__RenderItem = ({ e }) => {
 
 const MyDialog_Edit = ({ collection }) => {
   let [editValue, setEditValue] = useState<string>(collection?.name);
-  const { handleEditNotesCollection }: any = useContext(
-    NotesCollectionsContext
-  );
+  const { handleEditNotesCollection }: any = useCollectionContext();
   return (
     <MyDialog
       trigger={
@@ -187,9 +175,7 @@ const MyDialog_Edit = ({ collection }) => {
 };
 
 const MyDialog_Delete = ({ collection }) => {
-  const { handleDeleteNoteCollection }: any = useContext(
-    NotesCollectionsContext
-  );
+  const { handleDeleteNoteCollection }: any = useCollectionContext();
 
   return (
     <MyDialog

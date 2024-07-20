@@ -6,26 +6,25 @@ import { useEffect } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useNotesContext } from "@/context/NotesContext";
 import selectedCollectionStore from "@/zustand/selectedCollection.store";
+import { useCollectionContext } from "@/context/CollectionsContext";
 
 export default function IndexRoute() {
   const { collectionApi } = collectionApiStore((state) => state);
   const { notes } = notesStore((state) => state);
   const { isSignedIn, isLoaded } = useAuth();
   const { getNotes } = useNotesContext();
-  const { collectionId, setCollectionId } = selectedCollectionStore(
-    (state) => state
-  );
+  const { handleGetCollectionApi, getCollections } = useCollectionContext();
+
+  const { collectionId } = selectedCollectionStore((state) => state);
   useEffect(() => {
+    console.log("check render");
     if (collectionId && isSignedIn && isLoaded) {
       getNotes();
-    }
-    if (!isSignedIn && isLoaded) {
-      // setCollectionId("");
-    }
-    if (isSignedIn && isLoaded) {
-      console.log("user is signed in");
+      getCollections();
+      handleGetCollectionApi();
     }
   }, [collectionId, isSignedIn, isLoaded]);
+
   if (!collectionApi?.name) {
     <div className="fixed w-full h-full top-0 flexCenter z-[-1]">
       Select a Note Collection
