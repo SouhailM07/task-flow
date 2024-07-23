@@ -17,12 +17,14 @@ export default function IndexRoute() {
 
   const { collectionId } = selectedCollectionStore((state) => state);
   useEffect(() => {
-    console.log("check render");
-    if (collectionId && isSignedIn && isLoaded) {
-      getNotes();
-      getCollections();
-      handleGetCollectionApi();
-    }
+    let startingApp = async () => {
+      if (collectionId && isSignedIn && isLoaded) {
+        await getCollections();
+        await getNotes();
+        await handleGetCollectionApi();
+      }
+    };
+    startingApp();
   }, [collectionId, isSignedIn, isLoaded]);
 
   if (!collectionApi?.name) {
